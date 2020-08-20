@@ -1,7 +1,6 @@
 """ Вакансии """
 
 jobs = [
-
     {"title": "Разработчик на Python", "cat": "backend", "company": "staffingsmarter", "salary_from": "100000",
      "salary_to": "150000", "posted": "2020-03-11", "desc": "Потом добавим"},
     {"title": "Разработчик в проект на Django", "cat": "backend", "company": "swiftattack", "salary_from": "80000",
