@@ -3,10 +3,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
-from .form import MyUserCreationForm
+from .forms import UserCreationForm
 
 
-class MyLoginView(View):
+class LoginView(View):
     def get(self, request):
         return render(request, 'profile/login.html', {})
 
@@ -21,12 +21,12 @@ class MyLoginView(View):
             return HttpResponse("Invalid login details given")
 
 
-class MySignupView(View):
+class SignupView(View):
     def get(self, request):
         return render(request, 'profile/register.html', {})
 
     def post(self, request):
-        user_form = MyUserCreationForm(request.POST)
+        user_form = UserCreationForm(request.POST)
         if user_form.is_valid():
             user_form.save()
         return redirect('/login')

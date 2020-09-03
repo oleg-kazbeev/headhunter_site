@@ -3,23 +3,15 @@
 {% block title %} Компания | Джуманджи {% endblock %}
 
 {% block content1 %}
-        <ul class="navbar-nav col-2 justify-content-end">
-          <li class="nav-item active">
-            <a href="#" class="nav-link font-weight-bold">Вход</a>
-          </li>
-        </ul>
-{% endblock %}
-
-{% block content2 %}
   <main class="container mt-3">
     <div class="navbar mt-5">
       <p><a href="/">Назад</a></p>
     </div>
     <section>
       <div class="text-center">
-        <img src="{{ company_name.logo.url }}" width="130" height="80" alt="">
+        <img src="{{ company.logo.url }}" width="130" height="80" alt="">
       </div>
-      <h1 class="h1 text-center mx-auto mt-0 pt-1" style="font-size: 70px;"><strong>{{ company_name.name }}</strong></h1>
+      <h1 class="h1 text-center mx-auto mt-0 pt-1" style="font-size: 70px;"><strong>{{ company.name }}</strong></h1>
       <p class="text-center pt-1">Компания, 5 вакансий</p>
       {% if vacancies %}
       <div class="row mt-5">

@@ -1,5 +1,5 @@
 from django.http import HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 
 from .models import Specialty, Vacancy
@@ -23,25 +23,25 @@ class MainView(View):
                                                             number_of_vacancies_by_specialty})
 
 
-class AllVacanciesView(View):
+class VacanciesView(View):
     def get(self, request):
         jobs = Vacancy.objects.all()
         return render(request, 'vacancies/all-vacancies.html', {'jobs': jobs})
 
 
-class VacanciesBySpecializationView(View):
+class VacanciesBySpecialtyView(View):
     def get(self, request, specialty):
-        jobs_sorted_by_specialty = Vacancy.objects.filter(specialty__code=specialty)
-        return render(request, 'vacancies/vacancies.html', {'jobs': jobs_sorted_by_specialty,
+        vacancies = Vacancy.objects.filter(specialty__code=specialty)
+        return render(request, 'vacancies/vacancies.html', {'vacancies': vacancies,
                                                             'specialty': specialty})
 
 
-class CompanyVacanciesView(View):
+class VacanciesInCompanyView(View):
     def get(self, request, company_id):
-        company_vacancies = Vacancy.objects.filter(company__id=company_id)
-        company_name = Company.objects.filter(id=company_id).first()
+        company = get_object_or_404(Company, id=company_id)
+        company_vacancies = Vacancy.objects.filter(company=company)
         return render(request, 'vacancies/company.html', {'vacancies': company_vacancies,
-                                                          'company_name': company_name})
+                                                          'company': company})
 
 
 class VacancyView(View):
@@ -50,21 +50,21 @@ class VacancyView(View):
         return render(request, 'vacancies/vacancy.html', {'vacancy': vacancy})
 
     def post(self, request, vacancy_id):
-        application_form = FeedbackForm(data=request.POST)
-        if application_form.is_valid():
-            application = application_form.save(commit=False)
+        feedback_form = FeedbackForm(data=request.POST)
+        if feedback_form.is_valid():
+            feedback = feedback_form.save(commit=False)
             vacancy = Vacancy.objects.filter(id=vacancy_id).first()
             user = request.user
-            application.user = user
-            application.vacancy = vacancy
-            application.save()
+            feedback.user = user
+            feedback.vacancy = vacancy
+            feedback.save()
             return redirect(f'{vacancy_id}/send')
         else:
-            print(application_form.errors)
+            print(feedback_form.errors)
             redirect(f'{vacancy_id}')
 
 
-class ResponseSendView(View):
+class VacancyResponseSendView(View):
     def get(self, request, vacancy_id):
         return render(request, 'vacancies/sent.html', {'vacancy_id': vacancy_id})
 
