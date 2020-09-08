@@ -29,23 +29,29 @@ class MainView(View):
 
 class VacanciesView(View):
     def get(self, request):
-        jobs = Vacancy.objects.all()
-        return render(request, 'vacancies/all-vacancies.html', {'jobs': jobs})
+        vacancies = Vacancy.objects.all()
+        amount_of_vacancies = vacancies.count
+        return render(request, 'vacancies/all-vacancies.html', {'vacancies': vacancies,
+                                                                'amount': amount_of_vacancies})
 
 
 class VacanciesBySpecialtyView(View):
     def get(self, request, specialty):
         vacancies = Vacancy.objects.filter(specialty__code=specialty)
+        amount_of_vacancies = vacancies.count
         return render(request, 'vacancies/vacancies.html', {'vacancies': vacancies,
-                                                            'specialty': specialty})
+                                                            'specialty': specialty,
+                                                            "amount": amount_of_vacancies})
 
 
 class VacanciesInCompanyView(View):
     def get(self, request, company_id):
         company = get_object_or_404(Company, id=company_id)
         company_vacancies = Vacancy.objects.filter(company=company)
+        amount_of_vacancies = company_vacancies.count
         return render(request, 'vacancies/company.html', {'vacancies': company_vacancies,
-                                                          'company': company})
+                                                          'company': company,
+                                                          "amount": amount_of_vacancies})
 
 
 class VacancyView(View):
