@@ -9,18 +9,22 @@ from .forms import FeedbackForm
 
 class MainView(View):
     def get(self, request):
+        specialties_and_amount_of_vacancies = []
         specialties = Specialty.objects.all()
-        number_of_vacancies_by_specialty = {}
 
         for specialty in specialties:
-            number_of_vacancies_by_specialty[specialty.code] = \
-                Vacancy.objects.filter(specialty__code=specialty.code).count()
+            amount_of_vacancies_by_specialty = Vacancy.objects.filter(specialty__code=specialty.code).count
+            specialties_and_amount_of_vacancies.append([specialty, amount_of_vacancies_by_specialty])
 
         companies = Company.objects.all()
-        return render(request, 'vacancies/index.html', {'specialties': specialties,
-                                                        'companies': companies,
-                                                        'number_of_vacancies_by_specialty':
-                                                            number_of_vacancies_by_specialty})
+        companies_and_amount_of_vacancies = []
+
+        for company in companies:
+            amount_of_company_vacancies = Vacancy.objects.filter(company=company).count
+            companies_and_amount_of_vacancies.append([company, amount_of_company_vacancies])
+
+        return render(request, 'vacancies/index.html', {'specialties': specialties_and_amount_of_vacancies,
+                                                        'companies': companies_and_amount_of_vacancies})
 
 
 class VacanciesView(View):
