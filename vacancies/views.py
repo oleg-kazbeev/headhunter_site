@@ -71,7 +71,7 @@ class VacancyView(View):
             return redirect(f'{vacancy_id}/send')
         else:
             print(feedback_form.errors)
-            redirect(f'{vacancy_id}')
+            return redirect(f'{vacancy_id}')
 
 
 class VacancyResponseSendView(View):
